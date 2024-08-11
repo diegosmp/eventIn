@@ -42,7 +42,40 @@ export default class UserController {
         password: passwordHash,
       })
 
-      return res.status(201).json({ message: 'Usuário cadastyrado com sucesso!', newUser })
+      return res.status(201).json({ message: 'Usuário cadastrado com sucesso!', newUser })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'Erro ao conectar com o servidor!' })
+    }
+  }
+
+  static async editUser(req: Request, res: Response) {
+    const { firstname, lastname, email } = req.body
+    const { userId } = req.params
+
+    const user: any = await User.findByPk(userId)
+
+    if (!firstname) {
+      return res.status(422).json({ message: 'Campo primeiro nome é obrigatório!' })
+    }
+    if (!lastname) {
+      return res.status(422).json({ message: 'Campo segundo nome é obrigatório!' })
+    }
+    if (!email) {
+      return res.status(422).json({ message: 'Campo email é obrigatório!' })
+    }
+
+    try {
+      await User.update(
+        {
+          firstname,
+          lastname,
+          email,
+        },
+        { where: { id: userId } },
+      )
+
+      return res.status(200).json({ message: 'Usuário atualizado com sucesso!' })
     } catch (error) {
       console.log(error)
       return res.status(500).json({ message: 'Erro ao conectar com o servidor!' })

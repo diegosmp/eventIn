@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize'
 import sequelize from '../../config/sequelize'
+import { User } from './User'
 
 export const Guests = sequelize.define('Guests', {
   id: {
@@ -39,4 +40,15 @@ export const Guests = sequelize.define('Guests', {
   event: {
     type: DataTypes.STRING,
   },
+
+  id_user: {
+    type: DataTypes.UUID,
+    references: {
+      model: User,
+      key: 'id',
+    },
+  },
 })
+
+User.hasMany(Guests, { foreignKey: 'id_user', as: 'guests' })
+Guests.belongsTo(User, { foreignKey: 'id_user', as: 'user' })

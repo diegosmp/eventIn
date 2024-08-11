@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import { User } from '../models/User'
+import createTokenUser from '../middlewares/createTokenUser'
 
 export default class UserController {
   static async createUser(req: Request, res: Response) {
@@ -42,7 +43,7 @@ export default class UserController {
         password: passwordHash,
       })
 
-      return res.status(201).json({ message: 'Usuário cadastrado com sucesso!', newUser })
+      createTokenUser(newUser, req, res)
     } catch (error) {
       console.log(error)
       return res.status(500).json({ message: 'Erro ao conectar com o servidor!' })

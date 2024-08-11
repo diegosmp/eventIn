@@ -35,7 +35,7 @@ export default class UserController {
     const passwordHash = await bcrypt.hash(password, 12)
 
     try {
-      const newUser = User.create({
+      const newUser = await User.create({
         firstname,
         lastname,
         email,

@@ -81,4 +81,20 @@ export default class UserController {
       return res.status(500).json({ message: 'Erro ao conectar com o servidor!' })
     }
   }
+
+  static async userDelete(req: Request, res: Response) {
+    const { userId } = req.params
+
+    const user = await User.findByPk(userId)
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não cadastrado!' })
+    }
+
+    try {
+      await User.destroy({ where: { id: userId } })
+
+      return res.status(200).json({ message: 'Usuário deletado com sucesso!' })
+    } catch (error) {}
+  }
 }

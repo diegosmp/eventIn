@@ -54,8 +54,6 @@ export default class UserController {
     const { firstname, lastname, email } = req.body
     const { userId } = req.params
 
-    const user: any = await User.findByPk(userId)
-
     if (!firstname) {
       return res.status(422).json({ message: 'Campo primeiro nome é obrigatório!' })
     }

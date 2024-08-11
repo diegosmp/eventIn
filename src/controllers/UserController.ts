@@ -118,6 +118,9 @@ export default class UserController {
       await User.destroy({ where: { id: userId } })
 
       return res.status(200).json({ message: 'Usuário deletado com sucesso!' })
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'Erro ao conectar com o servidor!' })
+    }
   }
 }

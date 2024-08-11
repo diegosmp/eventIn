@@ -50,7 +50,29 @@ export default class UserController {
     }
   }
 
-  static async loginUser(req: Request, res: Response) {}
+  static async loginUser(req: Request, res: Response) {
+    const { email, password } = req.body
+
+    if (!email) {
+      return res.status(422).json({ message: 'Campo email é obrigatório!' })
+    }
+    if (!password) {
+      return res.status(422).json({ message: 'Campo senha é obrigatório!' })
+    }
+
+    const user = await User.findOne({ where: { email } })
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado!' })
+    }
+
+    try {
+      createTokenUser(user, req, res)
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'Erro ao conectar com o servidor!' })
+    }
+  }
 
   static async editUser(req: Request, res: Response) {
     const { firstname, lastname, email } = req.body

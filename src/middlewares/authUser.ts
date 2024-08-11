@@ -27,10 +27,6 @@ const authUser = async (req: Request, res: Response, next: NextFunction) => {
 
   const user = await User.findByPk(decoded.id, { attributes: { exclude: ['password'] } })
 
-  if (!user) {
-    return res.status(404).json({ message: 'Usuário não encontrado!' })
-  }
-
   req.user = user
   next()
 }

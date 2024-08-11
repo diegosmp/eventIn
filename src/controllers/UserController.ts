@@ -50,6 +50,8 @@ export default class UserController {
     }
   }
 
+  static async loginUser(req: Request, res: Response) {}
+
   static async editUser(req: Request, res: Response) {
     const { firstname, lastname, email } = req.body
     const { userId } = req.params

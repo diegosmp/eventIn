@@ -35,4 +35,8 @@ export const Guests = sequelize.define('Guests', {
     allowNull: false,
     unique: true,
   },
+
+  event: {
+    type: DataTypes.STRING,
+  },
 })

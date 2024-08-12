@@ -107,4 +107,21 @@ export default class GuestsController {
       return res.status(500).json({ message: 'Erro ao conecctar com servidor!' })
     }
   }
+
+  static async deleteGuests(req: Request, res: Response) {
+    const { guestId } = req.params
+    const guestExist = await Guests.findByPk(guestId)
+
+    if (!guestExist) {
+      return res.status(404).json({ message: 'Convidado não cadastrado!' })
+    }
+
+    try {
+      await Guests.destroy({ where: { id: guestId } })
+      return res.status(200).json({ message: 'Convidado deletado com sucesso!' })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'Erro ao conecctar com servidor!' })
+    }
+  }
 }

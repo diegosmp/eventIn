@@ -51,4 +51,4 @@ export const Guests = sequelize.define('Guests', {
 })
 
 User.hasMany(Guests, { foreignKey: 'id_user', as: 'guests' })
-Guests.belongsTo(User, { foreignKey: 'id_user', as: 'user' })
+Guests.belongsTo(User, { foreignKey: 'id_user', as: 'users' })

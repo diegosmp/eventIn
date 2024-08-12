@@ -48,6 +48,7 @@ export default class GuestsController {
         {
           include: {
             model: User,
+            as: 'users',
           },
         },
       )

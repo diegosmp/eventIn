@@ -59,4 +59,52 @@ export default class GuestsController {
       return res.status(500).json({ message: 'Erro ao conecctar com servidor!' })
     }
   }
+
+  static async editGuests(req: Request, res: Response) {
+    const { firstname, lastname, email, event, cpf, tel } = req.body
+    const { userId } = req.params
+
+    if (!firstname) {
+      return res.status(422).json({ message: 'Primeiro nome obrigatório!' })
+    }
+    if (!lastname) {
+      return res.status(422).json({ message: 'Segundo nome obrigatório!' })
+    }
+    if (!email) {
+      return res.status(422).json({ message: 'Email obrigatório!' })
+    }
+    if (!event) {
+      return res.status(422).json({ message: 'Nome do evento obrigatório!' })
+    }
+    if (!cpf) {
+      return res.status(422).json({ message: 'CPF obrigatório!' })
+    }
+    if (!tel) {
+      return res.status(422).json({ message: 'Telefone obrigatório!' })
+    }
+
+    const guestsExist = await Guests.findOne({ where: { email } })
+
+    if (!guestsExist) {
+      return res.status(422).json({ message: 'Usuário não cadastrado!' })
+    }
+
+    try {
+      const cleanedCpf = cpf.replace(/[^\d]/g, '')
+      await Guests.update(
+        {
+          firstname,
+          lastname,
+          email,
+          event,
+          cpf: cleanedCpf,
+          tel,
+        },
+        { where: { id: { userId } } },
+      )
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'Erro ao conecctar com servidor!' })
+    }
+  }
 }

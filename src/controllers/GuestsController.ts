@@ -1,9 +1,11 @@
 import { Request, Response } from 'express'
 import { Guests } from '../models/Guests'
+import { User } from '../models/User'
 
 export default class GuestsController {
   static async createGuests(req: Request, res: Response) {
     const { firstname, lastname, email, event, cpf, tel } = req.body
+    const { userId } = req.params
 
     if (!firstname) {
       return res.status(422).json({ message: 'Primeiro nome obrigatório!' })
@@ -28,6 +30,32 @@ export default class GuestsController {
 
     if (guestsExist) {
       return res.status(422).json({ message: 'Usuário já cadastrado!' })
+    }
+
+    try {
+      const cleanedCpf = cpf.replace(/[^\d]/g, '')
+
+      const newGuests = await Guests.create(
+        {
+          firstname,
+          lastname,
+          email,
+          event,
+          cpf: cleanedCpf,
+          tel,
+          id_user: userId,
+        },
+        {
+          include: {
+            model: User,
+          },
+        },
+      )
+
+      return res.status(201).json({ message: 'Convidado cadastrado com sucesso!', newGuests })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'Erro ao conecctar com servidor!' })
     }
   }
 }

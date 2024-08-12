@@ -5,7 +5,7 @@ import authUser from '../middlewares/authUser'
 const router = express.Router()
 
 router.use(authUser)
-router.get('/all/guests')
+router.get('/all/guests', GuestsController.allGuests)
 router.post('/create/:userId', GuestsController.createGuests)
 router.patch('/:guestId/edit/:userId', GuestsController.createGuests)
 router.delete('/:guestId/delete/:userId', GuestsController.createGuests)

@@ -60,6 +60,20 @@ export default class GuestsController {
     }
   }
 
+  static async allGuests(req: Request, res: Response) {
+    const guests = await Guests.findAll()
+
+    if (!guests) {
+      return res.status(200).json({ message: 'Nenhum convidado cadastrado!' })
+    }
+    try {
+      return res.status(200).json({ message: guests })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'Erro ao conecctar com servidor!' })
+    }
+  }
+
   static async editGuests(req: Request, res: Response) {
     const { firstname, lastname, email, event, cpf, tel } = req.body
     const { userId } = req.params

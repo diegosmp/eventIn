@@ -20,3 +20,10 @@ Com ele podemos cadastrar visitantes e alunos já da escola. Onde pegamos nome, 
     <img alt="Sequelize" src="https://img.shields.io/badge/sequelize-323330?style=for-the-badge&logo=sequelize&logoColor=blue" />
     <img alt="SQLite" src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" />
 </div>
+
+## Como utilizar
+
+Instale o typescript `npm  i -D typescript` ou caso queria instalar globalmente em sua maquina `npm  i -g typescript`
+Instale o `npm install`
+
+Para executar `npm run dev`

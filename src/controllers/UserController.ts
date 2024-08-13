@@ -88,6 +88,12 @@ export default class UserController {
       return res.status(422).json({ message: 'Campo email é obrigatório!' })
     }
 
+    const user = await User.findByPk(userId)
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não cadastrado!' })
+    }
+
     try {
       await User.update(
         {

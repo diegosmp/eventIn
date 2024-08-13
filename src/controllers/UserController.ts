@@ -61,6 +61,7 @@ export default class UserController {
 
   static async loginUser(req: Request, res: Response) {
     const { email, password } = req.body
+    const user: any = await User.findOne({ where: { email } })
 
     if (!email) {
       return res.status(422).json({ message: 'Campo email é obrigatório!' })
@@ -69,10 +70,14 @@ export default class UserController {
       return res.status(422).json({ message: 'Campo senha é obrigatório!' })
     }
 
-    const user = await User.findOne({ where: { email } })
+    const chekedPasswordUser = await bcrypt.compare(password, user.password)
+
+    if (!chekedPasswordUser) {
+      return res.status(422).json({ message: 'Usuário ou senha incorreto!' })
+    }
 
     if (!user) {
-      return res.status(404).json({ message: 'Usuário não encontrado!' })
+      return res.status(404).json({ message: 'Usuário ou senha incorreto!' })
     }
 
     try {
@@ -86,6 +91,7 @@ export default class UserController {
   static async editUser(req: Request, res: Response) {
     const { firstname, lastname, email } = req.body
     const { userId } = req.params
+    const user: any = await User.findByPk(userId)
 
     if (!firstname) {
       return res.status(422).json({ message: 'Campo primeiro nome é obrigatório!' })
@@ -97,8 +103,6 @@ export default class UserController {
       return res.status(422).json({ message: 'Campo email é obrigatório!' })
     }
 
-    const user = await User.findByPk(userId)
-
     if (!user) {
       return res.status(404).json({ message: 'Usuário não cadastrado!' })
     }
@@ -109,6 +113,7 @@ export default class UserController {
           firstname,
           lastname,
           email,
+          password: user.password,
         },
         { where: { id: userId } },
       )

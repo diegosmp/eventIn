@@ -120,6 +120,29 @@ export default class UserController {
     }
   }
 
+  static async userResetPass(req: Request, res: Response) {
+    const { userId } = req.params
+    const { password, confirmPass } = req.body
+
+    if (!password) {
+      return res.status(422).json({ message: 'Campo senha é obrigatório!' })
+    }
+
+    if (!confirmPass) {
+      return res.status(422).json({ message: 'Campo confirmação de senha é obrigatório!' })
+    }
+
+    if (password !== confirmPass) {
+      return res.status(422).json({ message: 'As senhas não são iguais!' })
+    }
+
+    const user = await User.findByPk(userId)
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não cadastrado!' })
+    }
+  }
+
   static async userDelete(req: Request, res: Response) {
     const { userId } = req.params
 

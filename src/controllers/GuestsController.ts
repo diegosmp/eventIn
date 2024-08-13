@@ -4,7 +4,7 @@ import { User } from '../models/User'
 
 export default class GuestsController {
   static async createGuests(req: Request, res: Response) {
-    const { firstname, lastname, email, event, cpf, tel } = req.body
+    const { firstname, lastname, email, event, cpf, tel, city } = req.body
     const { userId } = req.params
 
     if (!firstname) {
@@ -25,6 +25,9 @@ export default class GuestsController {
     if (!tel) {
       return res.status(422).json({ message: 'Telefone obrigatório!' })
     }
+    if (!city) {
+      return res.status(422).json({ message: 'Cidade obrigatório!' })
+    }
 
     const guestsExist = await Guests.findOne({ where: { email } })
 
@@ -43,6 +46,7 @@ export default class GuestsController {
           event,
           cpf: cleanedCpf,
           tel,
+          city,
           id_user: userId,
         },
         {
@@ -75,7 +79,7 @@ export default class GuestsController {
   }
 
   static async editGuests(req: Request, res: Response) {
-    const { firstname, lastname, email, event, cpf, tel } = req.body
+    const { firstname, lastname, email, event, cpf, tel, city } = req.body
     const { userId } = req.params
 
     if (!firstname) {
@@ -113,6 +117,7 @@ export default class GuestsController {
           event,
           cpf: cleanedCpf,
           tel,
+          city,
         },
         { where: { id: { userId } } },
       )

@@ -41,6 +41,11 @@ export const Guests = sequelize.define('Guests', {
     type: DataTypes.STRING,
   },
 
+  city: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
   id_user: {
     type: DataTypes.UUID,
     references: {

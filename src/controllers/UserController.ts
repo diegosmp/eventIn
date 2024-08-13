@@ -13,9 +13,18 @@ export default class UserController {
     if (!lastname) {
       return res.status(422).json({ message: 'Campo segundo nome é obrigatório!' })
     }
+
+    const emailVerifyUser = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]/i
+    console.log(!emailVerifyUser.test(email))
+
+    if (!emailVerifyUser.test(email)) {
+      return res.status(422).json({ message: 'E-mail incorreto!' })
+    }
+
     if (!email) {
       return res.status(422).json({ message: 'Campo email é obrigatório!' })
     }
+
     if (!password) {
       return res.status(422).json({ message: 'Campo senha é obrigatório!' })
     }

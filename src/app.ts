@@ -11,4 +11,4 @@ app.use(express.json())
 app.use('/users', UserRoutes)
 app.use('/guests', GuestsRoute)
 
-conn.sync().then(() => app.listen(PORT || 5050))
+conn.sync({ force: true }).then(() => app.listen(PORT || 5050))

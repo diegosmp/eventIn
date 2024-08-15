@@ -7,6 +7,8 @@ export default class GuestsController {
     const { firstname, lastname, email, event, cpf, tel, city } = req.body
     const { userId } = req.params
 
+    const telExist = await Guests.findOne({ where: { tel } })
+
     if (!firstname) {
       return res.status(422).json({ message: 'Primeiro nome obrigatório!' })
     }
@@ -25,11 +27,14 @@ export default class GuestsController {
     if (!tel) {
       return res.status(422).json({ message: 'Telefone obrigatório!' })
     }
+    if (telExist) {
+      return res.status(422).json({ message: 'Telefone já cadastrado!' })
+    }
     if (!city) {
       return res.status(422).json({ message: 'Cidade obrigatório!' })
     }
 
-    const guestsExist = await Guests.findOne({ where: { email } })
+    const guestsExist: any = await Guests.findOne({ where: { email } })
 
     if (guestsExist) {
       return res.status(422).json({ message: 'Usuário já cadastrado!' })

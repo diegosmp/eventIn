@@ -7,7 +7,10 @@ export default class GuestsController {
     const { firstname, lastname, email, event, cpf, tel, city } = req.body
     const { userId } = req.params
 
+    const cleanedCpf = cpf.replace(/[^\d]/g, '')
+    const guestsExist: any = await Guests.findOne({ where: { email } })
     const telExist = await Guests.findOne({ where: { tel } })
+    const cpfExist = await Guests.findOne({ where: { cpf: cleanedCpf } })
 
     if (!firstname) {
       return res.status(422).json({ message: 'Primeiro nome obrigatório!' })
@@ -24,8 +27,16 @@ export default class GuestsController {
     if (!cpf) {
       return res.status(422).json({ message: 'CPF obrigatório!' })
     }
+    if (cpfExist) {
+      return res.status(422).json({ message: 'CPF já cadastrado!' })
+    }
+
     if (!tel) {
       return res.status(422).json({ message: 'Telefone obrigatório!' })
+    }
+    const regex = /^(\d{2,3})\d{9}$/
+    if (regex.test(tel)) {
+      return res.status(422).json({ message: 'Telefone incorreto!' })
     }
     if (telExist) {
       return res.status(422).json({ message: 'Telefone já cadastrado!' })
@@ -34,15 +45,11 @@ export default class GuestsController {
       return res.status(422).json({ message: 'Cidade obrigatório!' })
     }
 
-    const guestsExist: any = await Guests.findOne({ where: { email } })
-
     if (guestsExist) {
       return res.status(422).json({ message: 'Usuário já cadastrado!' })
     }
 
     try {
-      const cleanedCpf = cpf.replace(/[^\d]/g, '')
-
       const newGuests = await Guests.create(
         {
           firstname,
